@@ -312,19 +312,21 @@ const updateProfileAndCarDetails = async (req, res) => {
       typeof updatedDriverData.languages === "string"
     ) {
       try {
+        console.log("string block executedddddddddd");
         updatedDriverData.languages = JSON.parse(updatedDriverData.languages);
       } catch (error) {
         console.error("Invalid JSON in languages field", error);
         updatedDriverData.languages = [];
       }
     } else if (!updatedDriverData.languages) {
+      console.log("empty block  executedddddddddd");
       updatedDriverData.languages = [];
     }
     // Add this to ensure database storage as JSON string
     if (Array.isArray(updatedDriverData.languages)) {
-      updatedDriverData.languages = JSON.stringify(updatedDriverData.languages);
+      updatedDriverData.languages;
       console.log(
-        "Converted languages to JSON string for storage:",
+        "Converted languages to JSON string for storageeeeeeeeee:",
         updatedDriverData.languages
       );
     }

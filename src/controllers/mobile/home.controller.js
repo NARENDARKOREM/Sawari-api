@@ -125,6 +125,7 @@ const getAllHomeData = async (req, res) => {
         "dropoff_time",
         "Price",
         "Total",
+        "createdAt",
       ],
       include: [
         {
@@ -148,7 +149,7 @@ const getAllHomeData = async (req, res) => {
         },
       ],
       limit: 10,
-      order: [["scheduled_time", "DESC"]],
+      order: [["createdAt", "DESC"]],
     });
 
     console.log("DriverCar with Car:", JSON.stringify(driverCar, null, 2));
