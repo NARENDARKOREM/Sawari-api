@@ -635,7 +635,7 @@ const getRidesByStatusAndDriver = async (status, driverId) => {
     });
 
     // If accepted/on-route, sort by scheduled_time ascending
-    if (status === "accepted") {
+    if (status === "accepted" || status === "completed") {
       return ridesWithDates
         .filter((ride) => ride.scheduled_time) // only rides with scheduled_time
         .sort((a, b) => a.scheduled_time - b.scheduled_time)
