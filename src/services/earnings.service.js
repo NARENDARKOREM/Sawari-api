@@ -33,6 +33,7 @@ const earningsResponseDTO = (earnings) => {
     Ride: earnings.Ride
       ? {
           id: earnings.Ride.id,
+          ride_code: earnings.Ride.ride_code,
           customer_name: earnings.Ride.customer_name,
           email: earnings.Ride.email,
           phone: earnings.Ride.phone,
