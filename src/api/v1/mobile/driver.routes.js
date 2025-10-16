@@ -3,11 +3,11 @@ const router = express.Router();
 const driverAuthController = require("../../../controllers/mobile/driver-auth.controller");
 const authMiddleware = require("../../../middlewares/mobile/authMiddleware");
 const { endPoints } = require("../../api");
-const { validateRequest } = require("../../../middlewares/validateRequest");
-const {
-  blockDriverSchema,
-  updateStatusSchema,
-} = require("../../../validators/mobile/driver");
+// const { validateRequest } = require("../../../middlewares/validateRequest");
+// const {
+//   blockDriverSchema,
+//   updateStatusSchema,
+// } = require("../../../validators/mobile/driver");
 
 router.post(
   endPoints["mob-driver"].verifyMobile,
@@ -15,7 +15,6 @@ router.post(
 );
 router.post(
   endPoints["mob-driver"].blockDriverByIdentifier,
-  validateRequest(blockDriverSchema),
   driverAuthController.blockDriverByIdentifier
 );
 router.post(
@@ -46,7 +45,6 @@ router.get(
 router.put(
   endPoints["mob-driver"].updateStatuses,
   authMiddleware.isAuthenticated,
-  validateRequest(updateStatusSchema),
   driverAuthController.updateStatuses
 );
 router.put(

@@ -396,3 +396,23 @@ for prettier check -> npx prettier --write .
 <!-- for single or multiple file check -->
 
 npx prettier --write README.md src/controllers/mobile/ticket.controller.js src/controllers/mobile/vehicle.controller.js src/controllers/mobile/wallet.controller.js
+
+# mobile
+
+1. # api/v1/mobile/driver/update-profile [POST]
+   | Step      | Action                                                                                                                                                                                                         |
+   | --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+   | 🆔 **1**  | **Check Driver Authorization:** Ensure the `driverId` exists in the request. If missing, return a `400` error.                                                                                                 |
+   | ❌ **2**  | **Validate Request Body:** Extract and prepare the `updatedDriverData` from the request body for processing.                                                                                                   |
+   | 🔍 **3**  | **Fetch Existing Driver Data:** Retrieve the existing driver record from the database to check current details and determine if any changes are needed.                                                        |
+   | 🖼 **4**  | **Profile Picture and Document Handling:** For each file (e.g., profile pic, license docs), check if it has been updated. If so, delete the old file from S3 storage and update the database with the new URL. |
+   | 📋 **5**  | **Verification Status:** If verification documents (`emirates_doc`, `license_doc`) are updated, mark them as "pending" and set the driver's approval status to `inactive`.                                     |
+   | 🌍 **6**  | **Handle Languages Field:** If the `languages` field is provided as a string, attempt to parse it into an array. If parsing fails, set it as an empty array.                                                   |
+   | 🗓 **7**  | **Format Date of Birth (DOB):** If a `dob` is provided, ensure it’s formatted correctly into a valid `Date` object.                                                                                            |
+   | ✅ **8**  | **Approval and Status Update:** If verification files are provided, set the `is_approved` flag to `false` and mark the driver's status as `inactive`.                                                          |
+   | 🔄 **9**  | **Update Driver Profile:** If any profile data changes were detected, update the driver's information in the database. If no changes were made, skip this step.                                                |
+   | 🚗 **10** | **Handle Car Data:** Prepare the car data, including `car_id`, `license_plate`, and `car_photos`. Check if there are any updates to car information.                                                           |
+   | 🔒 **11** | **Car Verification Documents:** For each car document (`rc_doc`, `insurance_doc`), if a new file is provided, delete the old one from S3 and set the document status to "pending".                             |
+   | 🏷 **12** | **Car Verification Status:** If any car verification document is provided, set the `is_approved` flag for the car to `false` and the driver's status to `inactive`.                                            |
+   | ✅ **13** | **Update Car Data:** If changes to car details are detected, update the car information in the database (or insert a new record if the car doesn’t exist).                                                     |
+   | 📈 **14** | **Response:** Return a successful response with the updated driver profile and vehicle data, or an error message if any issue occurred during the process.                                                     |
