@@ -8,6 +8,7 @@ const Car = require("../models/cars.model");
 const Earnings = require("../models/earnings.model");
 const Settings = require("../models/settings.model");
 const { generateRideCode } = require("../utils/generateCode");
+const { formatDate } = require("../utils/formatDate");
 // Response DTO
 const rideResponseDTO = (ride) => ({
   id: ride.id,
@@ -628,10 +629,11 @@ const getRidesByStatusAndDriver = async (status, driverId) => {
     // Convert Sequelize instances to plain objects and scheduled_time to Date
     const ridesWithDates = rides.map((ride) => {
       const rideObj = ride.get({ plain: true });
-      rideObj.scheduled_time = rideObj.scheduled_time
-        ? new Date(rideObj.scheduled_time)
-        : null;
-      return rideObj;
+      // rideObj.scheduled_time = rideObj.scheduled_time
+      //   ? new Date(rideObj.scheduled_time)
+      //   : null;
+      // return rideObj;
+      rideObj.scheduled_time = formatDate(rideObj.scheduled_time);
     });
 
     // If accepted/on-route, sort by scheduled_time ascending

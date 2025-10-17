@@ -398,9 +398,11 @@ for prettier check -> npx prettier --write .
 npx prettier --write README.md src/controllers/mobile/ticket.controller.js src/controllers/mobile/vehicle.controller.js src/controllers/mobile/wallet.controller.js
 
 <<<<<<< Updated upstream
+
 # mobile
 
 1. # api/v1/mobile/driver/update-profile [POST]
+
    | Step      | Action                                                                                                                                                                                                         |
    | --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
    | 🆔 **1**  | **Check Driver Authorization:** Ensure the `driverId` exists in the request. If missing, return a `400` error.                                                                                                 |
@@ -417,8 +419,9 @@ npx prettier --write README.md src/controllers/mobile/ticket.controller.js src/c
    | 🏷 **12** | **Car Verification Status:** If any car verification document is provided, set the `is_approved` flag for the car to `false` and the driver's status to `inactive`.                                            |
    | ✅ **13** | **Update Car Data:** If changes to car details are detected, update the car information in the database (or insert a new record if the car doesn’t exist).                                                     |
    | 📈 **14** | **Response:** Return a successful response with the updated driver profile and vehicle data, or an error message if any issue occurred during the process.                                                     |
-=======
-for Admin
+
+   =======
+   for Admin
 
 1. /api/v1/mobile/ride/get-by-status/:status [GET]
 
@@ -435,4 +438,5 @@ for Admin
 | ❓ 9  | If scheduled_time is missing, the ride is excluded from the "accepted"/"completed" sorting process           |
 | 🧾 10 | Maps each ride to a simplified response including ride details, package name, subpackage name, and car model |
 | 📦 11 | Returns the sorted and mapped ride list based on the status and the desired sorting logic                    |
->>>>>>> Stashed changes
+
+> > > > > > > Stashed changes
