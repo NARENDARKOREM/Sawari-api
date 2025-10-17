@@ -49,7 +49,7 @@ const driverAccountDetails = async (req, res) => {
       return res.status(401).json({ message: "Your are not authorized." });
     }
 
-    // Fetch driver and vehicle details
+    // Fetch driver and vehicle detailss
     const driver = await driverService.getDriverById(driverId);
     const vehicle = await driverCarService.getDriverCarByDriverId(driverId);
     const walletBalance = await walletService.getWalletBalance(driverId);
