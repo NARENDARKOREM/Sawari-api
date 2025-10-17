@@ -10,6 +10,11 @@ const Driver = sequelize.define(
       allowNull: false,
       defaultValue: DataTypes.UUIDV4,
     },
+    driver_code: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      comment: "Unique driver code",
+    },
     first_name: {
       type: DataTypes.STRING,
       allowNull: true,

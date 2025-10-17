@@ -10,6 +10,7 @@ const { fn, col, where: sequelizeWhere } = require("sequelize");
 // const { generateToken } = require("../utils/tokenUtils");
 // const { normalizePhone } = require("../utils/phoneUtils");
 const jwt = require("jsonwebtoken");
+const { generateDriverCode } = require("../utils/generateCode");
 
 const generateToken = (driverId) => {
   return jwt.sign({ id: driverId }, process.env.JWT_SECRET);
@@ -128,6 +129,7 @@ const verifyDriverMobile = async (phone, token, email, social_login) => {
     }
     if (!driver) {
       driver = await Driver.create({
+        driver_code: generateDriverCode(),
         phone: normalizedPhone,
 
         email: email || null,
@@ -181,6 +183,7 @@ const getDriverById = async (driverId) => {
   const driverInstance = await Driver.findByPk(driverId, {
     attributes: [
       "id",
+      "driver_code",
       "first_name",
       "last_name",
       "email",
