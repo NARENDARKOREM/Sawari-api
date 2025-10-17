@@ -581,12 +581,10 @@ const getRideByIdData = async (driver_id, ride_id) => {
       {
         model: Package,
         as: "Package",
-        include: [
-          {
-            model: SubPackage,
-            as: "PackageRates",
-          },
-        ],
+      },
+      {
+        model: SubPackage,
+        as: "SubPackage",
       },
       {
         model: Earnings,
