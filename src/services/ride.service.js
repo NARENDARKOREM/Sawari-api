@@ -567,6 +567,7 @@ const acceptedRides = async (where = {}) => {
   return await Ride.findAll({ where });
 };
 
+/// Get ride by ID with driver check
 const getRideByIdData = async (driver_id, ride_id) => {
   const ride = await Ride.findOne({
     where: {
