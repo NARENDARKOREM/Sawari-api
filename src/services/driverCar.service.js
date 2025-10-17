@@ -57,9 +57,19 @@ const carResponseDTO = async (data) => {
     }
   }
 
+  // ✅ Extract driver info if included
+  let driverInfo = null;
+  if (data.Driver) {
+    driverInfo = {
+      id: data.Driver.id,
+      name: `${data.Driver.first_name} ${data.Driver.last_name}`,
+    };
+  }
+
   return {
     id: data.id,
     driver_id: data.driver_id,
+    driver: driverInfo, // ✅ added
     car_id: data.car_id,
     car_model: carDetails ? carDetails.model : null,
     car_brand: carDetails ? carDetails.brand : null,
@@ -72,7 +82,7 @@ const carResponseDTO = async (data) => {
     rc_doc_status: data.rc_doc_status,
     insurance_doc_status: data.insurance_doc_status,
     is_approved: data.is_approved,
-    verified_by: verifiedByInfo, // <-- now includes name & role
+    verified_by: verifiedByInfo,
     status: data.status,
     createdAt: data.createdAt,
     updatedAt: data.updatedAt,
