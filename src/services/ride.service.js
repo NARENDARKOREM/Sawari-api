@@ -150,10 +150,15 @@ const createRide = async (data) => {
         customer_name: data.customer_name,
         phone: data.phone,
         email: data.email,
-        pickup_address: data.pickup_address,
-        drop_address: data.drop_address,
-        pickup_location: data.pickup_location,
-        drop_location: data.drop_location,
+        pickup_location:
+          typeof data.pickup_location === "string"
+            ? JSON.parse(data.pickup_location)
+            : data.pickup_location,
+
+        drop_location:
+          typeof data.drop_location === "string"
+            ? JSON.parse(data.drop_location)
+            : data.drop_location,
         car_id: data.car_id,
         package_id: data.package_id,
         subpackage_id: data.subpackage_id,
@@ -280,8 +285,18 @@ const updateRide = async (id, data) => {
         email: data.email || ride.email,
         pickup_address: data.pickup_address || ride.pickup_address,
         drop_address: data.drop_address || ride.drop_address,
-        pickup_location: data.pickup_location || ride.pickup_location,
-        drop_location: data.drop_location || ride.drop_location,
+        pickup_location: data.pickup_location
+          ? typeof data.pickup_location === "string"
+            ? JSON.parse(data.pickup_location)
+            : data.pickup_location
+          : ride.pickup_location,
+
+        drop_location: data.drop_location
+          ? typeof data.drop_location === "string"
+            ? JSON.parse(data.drop_location)
+            : data.drop_location
+          : ride.drop_location,
+
         car_id: data.car_id || ride.car_id,
         package_id: data.package_id || ride.package_id,
         subpackage_id: data.subpackage_id || ride.subpackage_id,
@@ -479,12 +494,16 @@ const getAllRides = async ({
       ],
     });
 
-    // Calculate summary
     const counts = await Ride.findAll({
       attributes: [
         "status",
         [Ride.sequelize.fn("COUNT", Ride.sequelize.col("id")), "count"],
-        [Ride.sequelize.fn("SUM", Ride.sequelize.col("Total")), "totalRevenue"],
+        [
+          Ride.sequelize.literal(
+            "SUM(CASE WHEN status = 'completed' THEN Total ELSE 0 END)"
+          ),
+          "totalRevenue",
+        ],
       ],
       group: ["status"],
       raw: true,
