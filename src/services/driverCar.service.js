@@ -2,8 +2,8 @@ const { uploadToS3 } = require("../config/fileUpload.aws");
 const DriverCar = require("../models/driver-cars.model");
 const Driver = require("../models/driver.model");
 const Car = require("../models/cars.model");
-const { Op } = require("sequelize");
 const Admin = require("../models/admin.model");
+const { Op, fn, col, where: sequelizeWhere, literal } = require("sequelize");
 const carDTO = (data) => {
   return {
     car_id: data.car_id,
@@ -107,12 +107,24 @@ const getVehiclesByDriver = async (driverId) => {
           attributes: ["id", "first_name", "last_name", "role"],
           required: false,
         },
+        {
+          model: Driver,
+          as: "Driver", // ✅ include driver info
+          attributes: ["id", "first_name", "last_name"],
+          required: false,
+        },
       ],
     });
 
     return vehicles.map((v) => ({
       id: v.id,
       driver_id: v.driver_id,
+      driver: v.Driver
+        ? {
+            id: v.Driver.id,
+            name: `${v.Driver.first_name} ${v.Driver.last_name}`,
+          }
+        : null,
       car_id: v.car_id,
       car_brand: v.Car?.brand || null,
       car_model: v.Car?.model || null,
@@ -255,12 +267,33 @@ const getAllVehicles = async ({
   const offset = (page - 1) * limit;
   const where = {};
 
+  // Normalize search input (handle multiple spaces and case)
+  const normalizedSearch = search.trim().replace(/\s+/g, " ");
+  const searchPattern = `%${normalizedSearch.replace(/ /g, "%")}%`;
+
   // Add search filter
   if (search) {
     where[Op.or] = [
-      { "$Car.brand$": { [Op.like]: `%${search}%` } },
-      { "$Car.model$": { [Op.like]: `%${search}%` } },
-      { license_plate: { [Op.like]: `%${search}%` } },
+      sequelizeWhere(fn("LOWER", col("Car.brand")), {
+        [Op.like]: searchPattern.toLowerCase(),
+      }),
+      sequelizeWhere(fn("LOWER", col("Car.model")), {
+        [Op.like]: searchPattern.toLowerCase(),
+      }),
+      sequelizeWhere(fn("LOWER", col("license_plate")), {
+        [Op.like]: searchPattern.toLowerCase(),
+      }),
+      sequelizeWhere(fn("LOWER", col("Driver.first_name")), {
+        [Op.like]: searchPattern.toLowerCase(),
+      }),
+      sequelizeWhere(fn("LOWER", col("Driver.last_name")), {
+        [Op.like]: searchPattern.toLowerCase(),
+      }),
+      // Optional: combined brand+model search if you want "Toyota Camry" to match both fields
+      literal(`CONCAT(Car.brand, ' ', Car.model) LIKE '${searchPattern}'`),
+      literal(
+        `LOWER(CONCAT(Driver.first_name, ' ', Driver.last_name)) LIKE '${searchPattern.toLowerCase()}'`
+      ),
     ];
   }
 
@@ -286,13 +319,13 @@ const getAllVehicles = async ({
       },
       {
         model: Admin,
-        as: "VerifierAdmin", // Alias for clarity
+        as: "VerifierAdmin",
         attributes: ["id", "first_name", "last_name", "role"],
         required: false,
       },
       {
         model: Driver,
-        as: "Driver", // Alias for clarity
+        as: "Driver",
         attributes: ["id", "first_name", "last_name"],
         required: false,
       },

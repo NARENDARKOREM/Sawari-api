@@ -17,6 +17,7 @@ const getAllDrivers = async (
     where[Op.or] = [
       { first_name: { [Op.like]: `%${search}%` } },
       { last_name: { [Op.like]: `%${search}%` } },
+      { driver_code: { [Op.like]: `%${search}%` } },
       { email: { [Op.like]: `%${search}%` } },
       { phone: { [Op.like]: `%${search}%` } },
     ];
@@ -92,6 +93,7 @@ const exportAllDrivers = async (search = "", status = "") => {
 
   if (search) {
     where[Op.or] = [
+      { driver_code: { [Op.like]: `%${search}%` } },
       { first_name: { [Op.like]: `%${search}%` } },
       { last_name: { [Op.like]: `%${search}%` } },
       { email: { [Op.like]: `%${search}%` } },
@@ -120,7 +122,7 @@ const exportAllDrivers = async (search = "", status = "") => {
     const worksheet = workbook.addWorksheet("Drivers");
 
     worksheet.columns = [
-      { header: "Driver ID", key: "id", width: 36 },
+      { header: "Driver ID", key: "driver_code", width: 20 },
       { header: "First Name", key: "first_name", width: 15 },
       { header: "Last Name", key: "last_name", width: 15 },
       { header: "Email", key: "email", width: 25 },
@@ -131,7 +133,7 @@ const exportAllDrivers = async (search = "", status = "") => {
 
     drivers.forEach((driver) => {
       worksheet.addRow({
-        id: driver.id ? driver.id.split("-")[0] : "-",
+        driver_code: driver.driver_code || "-",
         first_name: driver.first_name || "-",
         last_name: driver.last_name || "-",
         email: driver.email || "-",
@@ -161,7 +163,7 @@ const exportDriverById = async (driverId) => {
     const worksheet = workbook.addWorksheet("Driver");
 
     worksheet.columns = [
-      { header: "Driver ID", key: "id", width: 36 },
+      { header: "Driver ID", key: "driver_code", width: 20 },
       { header: "First Name", key: "first_name", width: 15 },
       { header: "Last Name", key: "last_name", width: 15 },
       { header: "Email", key: "email", width: 25 },
@@ -171,7 +173,7 @@ const exportDriverById = async (driverId) => {
     ];
 
     worksheet.addRow({
-      id: driver.id ? driver.id.split("-")[0] : "-",
+      driver_code: driver.driver_code || "-",
       first_name: driver.first_name || "-",
       last_name: driver.last_name || "-",
       email: driver.email || "-",

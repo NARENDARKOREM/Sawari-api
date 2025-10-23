@@ -272,6 +272,7 @@ const getDriverById = async (driverId) => {
   // Construct a plain object with attributes + computed fields
   const driver = {
     id: driverInstance.id,
+    driver_code: driverInstance.driver_code,
     first_name: driverInstance.first_name,
     last_name: driverInstance.last_name,
     email: driverInstance.email,
@@ -395,6 +396,7 @@ const getAllDrivers = async (
 
     where[Op.or] = [
       { first_name: { [Op.like]: `%${safeSearch}%` } },
+      { driver_code: { [Op.like]: `%${safeSearch}%` } },
       { last_name: { [Op.like]: `%${safeSearch}%` } },
       { email: { [Op.like]: `%${safeSearch}%` } },
       { phone: { [Op.like]: `%${safeSearch}%` } },
@@ -429,6 +431,7 @@ const getAllDrivers = async (
     where,
     attributes: [
       "id",
+      "driver_code",
       "first_name",
       "last_name",
       "email",

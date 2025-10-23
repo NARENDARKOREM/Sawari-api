@@ -26,7 +26,7 @@ const getDashboardStats = async () => {
   });
 
   const activeRides = await Ride.count({
-    where: { status: { [Op.in]: ["on-route", "accepted"] }, deletedAt: null },
+    where: { status: { [Op.in]: ["on-route"] }, deletedAt: null },
   });
 
   const completedRides = await Ride.count({
@@ -67,7 +67,7 @@ const getDashboardStats = async () => {
 
   const previousActiveRides = await Ride.count({
     where: {
-      status: { [Op.in]: ["on-route", "accepted"] },
+      status: { [Op.in]: ["on-route"] },
       createdAt: {
         [Op.gte]: startOfPreviousMonth,
         [Op.lte]: endOfPreviousMonth,
