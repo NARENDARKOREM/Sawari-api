@@ -150,6 +150,8 @@ const createRide = async (data) => {
         customer_name: data.customer_name,
         phone: data.phone,
         email: data.email,
+        pickup_address: data.pickup_address,
+        drop_address: data.drop_address,
         pickup_location:
           typeof data.pickup_location === "string"
             ? JSON.parse(data.pickup_location)

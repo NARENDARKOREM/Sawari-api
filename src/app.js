@@ -59,6 +59,8 @@ const allowedOrigins = [
   "http://localhost:3001",
   "https://sawari-admin.vercel.app",
 ];
+
+console.log(allowedOrigins, "originnnnnnnnnnnnn");
 app.use(
   cors({
     origin: (origin, callback) => {
